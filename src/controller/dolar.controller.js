@@ -9,7 +9,8 @@ dolarCtrl.getData = async (req, res) => {
     // args: chrome.args,
     // executablePath: chrome.executablePath,
     // headless: chrome.headless,
-    headless: true,
+    // headless: true,
+    args: ["--no-sandbox"],
   });
   let page = await browser.newPage();
 
