@@ -44,10 +44,10 @@ dolarCtrl.getData = async (req, res) => {
       } else {
         allData.push({
           type: type[i] ? type[i].innerText : "",
-          sellTitle: subtitle[i] ? subtitle[i].innerText : "",
-          sellPrice: price[k] ? price[k].innerText : "",
-          buyTitle: subtitle[i + 1] ? subtitle[i + 1].innerText : "",
-          buyPrice: price[k + 1] ? price[k + 1].innerText : "",
+          sellTitle: "VENTA",
+          sellPrice: price[k + 1] ? price[k + 1].innerText : "",
+          buyTitle: "COMPRA",
+          buyPrice: price[k] ? price[k].innerText : "",
         });
         k += 2;
       }
@@ -61,9 +61,9 @@ dolarCtrl.getData = async (req, res) => {
         allData.push({
           type: tables[h].innerText,
           sellTitle: "VENTA",
-          sellPrice: tables[h + 1] ? tables[h + 1].innerText : "",
+          sellPrice: tables[h + 2] ? tables[h + 2].innerText : "",
           buyTitle: "COMPRA",
-          buyPrice: tables[h + 2] ? tables[h + 2].innerText : "",
+          buyPrice: tables[h + 1] ? tables[h + 1].innerText : "",
         });
       }
     }
