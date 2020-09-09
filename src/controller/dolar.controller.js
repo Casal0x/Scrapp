@@ -44,9 +44,9 @@ dolarCtrl.getData = async (req, res) => {
       } else {
         allData.push({
           type: type[i] ? type[i].innerText : "",
-          sellTitle: "VENTA",
+          sellTitle: subtitle[i] ? subtitle[i].innerText : "",
           sellPrice: price[k] ? price[k].innerText : "",
-          buyTitle: "COMPRA",
+          buyTitle: subtitle[i + 1] ? subtitle[i + 1].innerText : "",
           buyPrice: price[k + 1] ? price[k + 1].innerText : "",
         });
         k += 2;
