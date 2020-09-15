@@ -1,6 +1,7 @@
 const route = require("express").Router();
-const { getData } = require("../controller/dolar.controller");
+const { getDataCached } = require("../controller/dolar.controller");
 
-route.get("/", getData);
+route.get("/", getDataCached);
+// route.get("/2", getDataCached);
 
 module.exports = route;

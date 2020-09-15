@@ -1,8 +1,11 @@
 const puppeteer = require("puppeteer");
+const myCache = require("../cache/cacheProvider");
+const CACHE_DURATION = 600;
+const CACHE_KEY = "DOLAR";
 // const chrome = require("chrome-aws-lambda");
 const dolarCtrl = {};
 
-dolarCtrl.getData = async (req, res) => {
+const scrap = async () => {
   let url = "https://www.dolarhoy.com/";
 
   let browser = await puppeteer.launch({
@@ -72,7 +75,27 @@ dolarCtrl.getData = async (req, res) => {
   });
 
   await browser.close();
+  return data;
+};
+
+dolarCtrl.getData = async (req, res) => {
+  const data = await scrap();
   res.json(data);
+};
+
+dolarCtrl.getDataCached = async (req, res) => {
+  const value = myCache.get(CACHE_KEY);
+  if (value === undefined) {
+    const data = await scrap();
+    const success = myCache.set(CACHE_KEY, data, CACHE_DURATION);
+    if (success) {
+      return res.json(data);
+    } else {
+      return res.json({ error: "Ocurrio un error!." });
+    }
+  } else {
+    res.json(value);
+  }
 };
 
 module.exports = dolarCtrl;
