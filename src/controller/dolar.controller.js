@@ -1,5 +1,6 @@
 const puppeteer = require("puppeteer");
 const myCache = require("../cache/cacheProvider");
+const { all } = require("../routes/dolar");
 const CACHE_DURATION = 600;
 const CACHE_KEY = "DOLAR";
 // const chrome = require("chrome-aws-lambda");
@@ -23,53 +24,36 @@ const scrap = async () => {
     const allData = [];
 
     const type = document.querySelectorAll(
-      "div.container > div.row > div.col-md-8 > div.row h4 a"
+      "div.tile.cotizaciones_more > div.tile.is-parent.entidad > div.tile.is-child > a > div.title"
     );
-    const subtitle = document.querySelectorAll(
-      "div.container > div.row > div.col-md-8 > div.row small"
+    const buy = document.querySelectorAll(
+      "div.tile.cotizaciones_more > div.tile.is-parent.entidad > div.tile.is-child > a > div.compra"
     );
-    const price = document.querySelectorAll(
-      "div.container > div.row > div.col-md-8 > div.row span.price"
+    const sell = document.querySelectorAll(
+      "div.tile.cotizaciones_more > div.tile.is-parent.entidad > div.tile.is-child > a > div.venta"
     );
-    const tables = document.querySelectorAll(
-      "div.table-responsive tbody > tr > td"
-    );
+    const dolarSolidarioTitle = document.querySelectorAll(
+      "div.tile.dolar > div.tile.is-parent.is-7 > div.tile.is-child > a.title"
+    )[3];
+    const dolarSolidarioVal = document.querySelectorAll(
+      "div.tile.dolar > div.tile.is-parent.is-7 > div.tile.is-child > div.values > div.venta > div.val"
+    )[3];
 
-    let k = 0;
-    for (let i = 0; i < type.length; i++) {
-      if (type[i] && type[i].innerText === "Dólar Turista ") {
-        allData.push({
-          type: type[i] ? type[i].innerText : "",
-          sellTitle: "VENTA",
-          sellPrice: price[k] ? price[k].innerText : "",
-        });
-        k += 1;
-      } else {
-        allData.push({
-          type: type[i] ? type[i].innerText : "",
-          sellTitle: "VENTA",
-          sellPrice: price[k + 1] ? price[k + 1].innerText : "",
-          buyTitle: "COMPRA",
-          buyPrice: price[k] ? price[k].innerText : "",
-        });
-        k += 2;
-      }
+    for (let [idx, item] of type.entries()) {
+      let newObj = {};
+
+      newObj.title = item.innerText;
+      newObj.buy = buy[idx].innerText;
+      newObj.sell = sell[idx].innerText;
+
+      allData.push(newObj);
     }
 
-    for (let h = 0; h < tables.length; h++) {
-      if (
-        tables[h].innerText === "Real brasileño" ||
-        tables[h].innerText === "Euro"
-      ) {
-        allData.push({
-          type: tables[h].innerText,
-          sellTitle: "VENTA",
-          sellPrice: tables[h + 2] ? tables[h + 2].innerText : "",
-          buyTitle: "COMPRA",
-          buyPrice: tables[h + 1] ? tables[h + 1].innerText : "",
-        });
-      }
-    }
+    allData.push({
+      title: dolarSolidarioTitle.innerText,
+      buy: null,
+      sell: dolarSolidarioVal.innerText,
+    });
 
     return allData;
   });
