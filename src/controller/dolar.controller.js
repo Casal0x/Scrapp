@@ -34,10 +34,10 @@ const scrap = async () => {
     );
     const dolarSolidarioTitle = document.querySelectorAll(
       "div.tile.dolar > div.tile.is-parent.is-7 > div.tile.is-child > a.title"
-    )[3];
+    );
     const dolarSolidarioVal = document.querySelectorAll(
       "div.tile.dolar > div.tile.is-parent.is-7 > div.tile.is-child > div.values > div.venta > div.val"
-    )[3];
+    );
 
     for (let [idx, item] of type.entries()) {
       let newObj = {};
@@ -50,9 +50,9 @@ const scrap = async () => {
     }
 
     allData.push({
-      title: dolarSolidarioTitle.innerText,
+      title: dolarSolidarioTitle[dolarSolidarioTitle.length - 1].innerText,
       buy: null,
-      sell: dolarSolidarioVal.innerText,
+      sell: dolarSolidarioVal[dolarSolidarioVal.length - 1].innerText,
     });
 
     return allData;
@@ -64,6 +64,7 @@ const scrap = async () => {
 
 dolarCtrl.getData = async (req, res) => {
   const data = await scrap();
+  console.log("asdadas");
   res.json(data);
 };
 
